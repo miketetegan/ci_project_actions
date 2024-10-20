@@ -76,7 +76,7 @@ jobs:
       - name: Snyk Scan
         uses: snyk/actions/maven@master
         with:
-          args: --path=./app
+          args: --path=$GITHUB_WORKSPACE/app
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
