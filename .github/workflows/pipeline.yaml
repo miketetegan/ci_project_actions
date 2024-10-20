@@ -72,7 +72,7 @@ jobs:
           mvn clean compile
           mvn clean package
         working-directory: ./app
-
+      #SCAN
       - name: Snyk Scan
         uses: snyk/actions/maven@master
         with:
