@@ -59,6 +59,6 @@ jobs:
         run: |
           echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
           ls -a 
-          ls -a /target/sonar
-          ls /target
+          ls -a /target/
+ 
         working-directory: ./app
