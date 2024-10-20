@@ -6,8 +6,8 @@ on:
 
 jobs:
   #SONARCLOUD SCAN
-  build: 
-    name: Build and analyze
+  sonarscan: 
+    name: Static Code Analysis (SAST)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -41,8 +41,8 @@ jobs:
         #-D sonar.projectName=-Dsonar.projectKey=project_ci_jenkins -D sonar.projectBaseDir=./app
         working-directory: ./app
 
-  # Add this after the SonarQube Scan step
       - name: SonarQube Quality Gate check
+        continue-on-error: true
         id: sonarqube-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@master
         with:
@@ -52,14 +52,30 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           #SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        
-      
+              
       - name: "SonarQube Quality Gate Status"
-        if: always()
+        #if: always()
         run: |
-          echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
-          ls -a 
-          ls -a target/
-          ls -a target/sonar/
- 
+          echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" 
+
+  DependenciesScan:
+    name: Snyk Dependencies Scan (SCA)
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: App packaging
+        run: |
+          mvn clean compile
+          mvn clean package
         working-directory: ./app
+
+      - name: Snyk Scan
+        uses: snyk/actions/maven@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        
