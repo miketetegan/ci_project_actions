@@ -40,4 +40,16 @@ jobs:
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=miketetegan_project_ci_jenkins -D sonar.java.binaries=target/classes -D sonar.java.libraries=target/dependency 
         #-D sonar.projectName=-Dsonar.projectKey=project_ci_jenkins -D sonar.projectBaseDir=./app
         working-directory: ./app
-  
+
+  # Add this after the SonarQube Scan step
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        # Force to fail step after specific time.
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      
+      - name: "SonarQube Quality Gate Status"
+        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
