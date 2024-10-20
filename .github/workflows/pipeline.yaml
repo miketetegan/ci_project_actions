@@ -34,7 +34,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=miketetegan_project_ci_jenkins 
+        run: |
+          mvn clean compile
+          mvn clean package
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=miketetegan_project_ci_jenkins -D sonar.java.binaries=target/classes -D sonar.java.libraries=target/dependency 
         #-D sonar.projectName=-Dsonar.projectKey=project_ci_jenkins -D sonar.projectBaseDir=./app
         working-directory: ./app
   
