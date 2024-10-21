@@ -118,12 +118,14 @@ jobs:
       - name: "SonarQube Quality Gate Status"
         if: always()
         run: |
-          echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"        
+          echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" 
+
+      - name: Package project
+        run: mvn clean package
+        working-directory: ./app
       
       - name: Build Docker image
-        run: |
-          mvn clean package
-          docker build -t mike004/java:latest .
+        run: docker build -t mike004/java:latest .
         
       - name: Scan Docker image
         uses: snyk/actions/maven@master
