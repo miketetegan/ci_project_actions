@@ -137,5 +137,23 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
         
-        
+  AppIntegrationAndDAST:
+    name: App Integration and DAST
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run docker-compose
+        run: docker compose up -d
+      - name: Dynamic App Security Testing
+        uses: docker://zaproxy/zap-stable
+        env:
+          target: http://localhost:8888/simple-web-app/users
+        with:
+          entrypoint: 'zap-baseline.py \'
+          args: '-t $target -r report.html -I'
+         
+    
         
