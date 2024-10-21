@@ -146,6 +146,7 @@ jobs:
         run: |
           docker compose up -d
           sleep 30
+          docker start owasp
         #status_code=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8888/simple-web-app/users)
           #echo "HTTP Status Code: $status_code"
           
@@ -162,7 +163,7 @@ jobs:
         run: | 
           docker ps
           docker network ls
-          docker run --name owasp --network pipeline_testing zaproxy/zap-stable:latest
+        #docker run --name owasp --network pipeline_testing zaproxy/zap-stable:latest
           docker exec owasp "zap-baseline.py -t $target -r report.html -I"
 
       - name: Push Image to Registry
