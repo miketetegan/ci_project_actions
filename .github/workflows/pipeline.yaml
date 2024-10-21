@@ -145,6 +145,8 @@ jobs:
           DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
         run: |
           docker compose up -d
+          sleep 30
+          docker start owasp && docker exec owasp "/zap/zap-baseline.py -t http://webapp:8888/simple-web-app/users -r report.xml -I"
         #sleep 30
         #docker start owasp
         #status_code=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8888/simple-web-app/users)
@@ -175,7 +177,7 @@ jobs:
           imageTag: latest
         run: |
           echo $DOCKERHUB_TOKEN | docker login -u $USERNAME --password-stdin
-          docker push ${imageName}:${imageTag}"
+          docker push ${imageName}:${imageTag}
 
 
          
