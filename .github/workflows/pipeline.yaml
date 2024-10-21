@@ -143,15 +143,22 @@ jobs:
           DB_PORT: 3306
           DB_NAME: "mydatabase"
           DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
-        run: docker compose up -d
+        run: |
+          docker compose up -d
+          status_code=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8888/simple-web-app/users)
+          echo "Status code: $status_code"
+          if [ "$status_code" != "200" ]; then
+            echo "App is not running correctly!"
+            exit 1
+          else
+            echo "App is running correctly!"
+          fi
         
       - name: Dynamic App Security Testing
-        uses: docker://zaproxy/zap-stable:latest
-        with:
-          entrypoint: 'zap-baseline.py \'
-          args: '-t $target -r report.html -I'
         env:
-          target: http://localhost:8888/simple-web-app/users
+          target: http://webapp:8888/simple-web-app/users
+        run: docker exec owasp zap-baseline.py -t $target -r report.html -I'
+
 
          
     
