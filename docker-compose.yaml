@@ -46,8 +46,9 @@ services:
     networks:
       - pipeline_testing
     depends_on:
-      database:
+      - database:
         condition: service_healthy
+      - webapp
     
 volumes:
   sql_data:
