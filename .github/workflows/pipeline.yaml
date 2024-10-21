@@ -160,6 +160,8 @@ jobs:
           target: http://webapp:8888/simple-web-app/users
         run: | 
           docker run --name owasp --network pipeline_testing zaproxy/zap-stable:latest
+          docker ps
+          docker network ls
           docker exec owasp "zap-baseline.py -t $target -r report.html -I"
 
       - name: Push Image to Registry
