@@ -41,9 +41,9 @@ jobs:
         #-D sonar.projectName=-Dsonar.projectKey=project_ci_jenkins -D sonar.projectBaseDir=./app
         working-directory: ./app
 
-      - name: SonarQube Quality Gate check
+      - name: Sonarcloud Quality Gate check
         continue-on-error: true
-        id: sonarqube-quality-gate-check
+        id: sonarcloud-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@master
         with:
           scanMetadataReportFile: $GITHUB_WORKSPACE/app/target/sonar/report-task.txt
@@ -53,10 +53,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           #SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
               
-      - name: "SonarQube Quality Gate Status"
+      - name: "Sonarcloud Quality Gate Status"
         #if: always()
         run: |
-          echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" 
+          echo "The Quality Gate status is ${{ steps.sonarcloud-quality-gate-check.outputs.quality-gate-status }}" 
 
   DependenciesScan:
     name: Snyk Dependencies Scan (SCA)
@@ -103,9 +103,9 @@ jobs:
             -D sonar.sources=.
             -D sonar.inclusions=Dockerfile
             
-      - name: SonarQube Quality Gate check
+      - name: Sonarcloud Quality Gate check
         continue-on-error: true
-        id: sonarqube-quality-gate-check
+        id: sonarcloud-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@master
         #with: CAN IGNORE IT NOW . SCAN 2 TIMES TO ACTIVAT THE GATE
         #  scanMetadataReportFile: $GITHUB_WORKSPACE/.scannerwork/report-task.txt
@@ -115,10 +115,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           #SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
               
-      - name: "SonarQube Quality Gate Status"
+      - name: "Sonarcloud Quality Gate Status"
         if: always()
         run: |
-          echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" 
+          echo "The Quality Gate status is ${{ steps.sonarcloud-quality-gate-check.outputs.quality-gate-status }}" 
 
       - name: Package project
         run: mvn clean package
@@ -155,18 +155,16 @@ jobs:
           #else
           #  echo "App is running correctly!"
           #fi
-        
-      - name: Dynamic App Security Testing
-        run: | 
-          docker ps 
-          netstat -lntp
 
-      - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.13.0
+      - name: ZAP Scan (DAST)
         env:
           target: http://localhost:8888/simple-web-app/users
+        continue-on-error: true
+        uses: zaproxy/action-baseline@v0.13.0
         with:
-          target: 'http://localhost:8888/simple-web-app/users'
+          target: '${target}'
+          fail_action: true
+          
         #docker exec owasp "zap-baseline.py -t $target -r report.html -I"
         #docker run --name owasp --network pipeline_testing zaproxy/zap-stable:latest
           
