@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   webapp:
-    image: java:latest
+    image: mike004/java:latest
     #container_name: webapp
     environment:
       - DB_URL=jdbc:mysql://database:${DB_PORT}/${DB_NAME}
