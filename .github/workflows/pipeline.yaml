@@ -146,7 +146,7 @@ jobs:
         run: docker compose up -d
         
       - name: Dynamic App Security Testing
-        uses: docker://zaproxy/zap-stable
+        uses: docker://zaproxy/zap-stable:latest
         env:
           target: http://localhost:8888/simple-web-app/users
         with:
