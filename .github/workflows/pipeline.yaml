@@ -121,7 +121,9 @@ jobs:
           echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"        
       
       - name: Build Docker image
-        run: docker build -t mike004/java:latest .
+        run: |
+          mvn clean package
+          docker build -t mike004/java:latest .
         
       - name: Scan Docker image
         uses: snyk/actions/maven@master
