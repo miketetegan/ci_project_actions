@@ -134,6 +134,7 @@ jobs:
         with:
           image: mike004/java:latest
           args: --severity-threshold=low
+          command: monitor
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
