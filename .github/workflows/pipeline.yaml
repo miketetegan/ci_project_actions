@@ -107,8 +107,8 @@ jobs:
         continue-on-error: true
         id: sonarqube-quality-gate-check
         uses: sonarsource/sonarqube-quality-gate-action@master
-        #with:
-        #  scanMetadataReportFile: $GITHUB_WORKSPACE/app/target/sonar/report-task.txt
+        with:
+          scanMetadataReportFile: $GITHUB_WORKSPACE/.scannerwork/sonar/report-task.txt
         # Force to fail step after specific time.
         timeout-minutes: 5
         env:
@@ -119,7 +119,7 @@ jobs:
         if: always()
         run: |
           echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
-          ls -a
+          ls -a .scannerwork
           
         
               
