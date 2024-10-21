@@ -43,6 +43,7 @@ services:
 
   owasp:
     image: zaproxy/zap-stable:latest
+    container_name: owasp
     networks:
       - pipeline_testing
     depends_on:
