@@ -102,7 +102,7 @@ jobs:
             -D sonar.projectKey=dockerfile
             -D sonar.sources=.
             -D sonar.inclusions=Dockerfile
-            -D sonar.projectKey=miketetegan_ci_project_actions 
+          #-D sonar.projectKey=miketetegan_ci_project_actions 
           
         
               
