@@ -37,7 +37,7 @@ jobs:
         run: |
           mvn clean compile
           mvn clean package
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=miketetegan_project_ci_jenkins -D sonar.java.binaries=target/classes -D sonar.java.libraries=target/dependency 
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=miketetegan_ci_project_actions -D sonar.java.binaries=target/classes -D sonar.java.libraries=target/dependency 
         #-D sonar.projectName=-Dsonar.projectKey=project_ci_jenkins -D sonar.projectBaseDir=./app
         working-directory: ./app
 
@@ -80,5 +80,37 @@ jobs:
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    
+  DockerBuildandScan:
+    name: Docker Image Build and Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        uses: sonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: .
+          args: >
+            -D sonar.organization=miketech
+            -D sonar.projectName=dockerfile
+            -D sonar.projectKey=dockerfile
+            -D sonar.sources=.
+            -D sonar.inclusions=Dockerfile
+            -D sonar.projectKey=miketetegan_ci_project_actions 
+          
+        
+              
+      
+     # - name: Build Docker image
+      #  run: docker build -t mike004/java:latest .
+
+      #- name: Scan Docker image
+        
         
         
