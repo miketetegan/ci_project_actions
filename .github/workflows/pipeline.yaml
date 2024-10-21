@@ -159,12 +159,10 @@ jobs:
           #fi
 
       - name: ZAP Scan (DAST)
-        env:
-          target: http://localhost:8888/simple-web-app/users
         continue-on-error: true
         uses: zaproxy/action-baseline@v0.13.0
         with:
-          target: '${target}'
+          target: 'http://localhost:8888/simple-web-app/users'
           fail_action: true
           
         #docker exec owasp "zap-baseline.py -t $target -r report.html -I"
