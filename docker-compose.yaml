@@ -48,7 +48,7 @@ services:
     depends_on:
         database:
           condition: service_healthy
-        webapp
+        #webapp
     
 volumes:
   sql_data:
