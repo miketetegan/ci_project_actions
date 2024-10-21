@@ -44,9 +44,9 @@ services:
   owasp:
     image: zaproxy/zap-stable:latest
     container_name: owasp
-    entrypoint: ["python3"]
+    #entrypoint: ["python3"]
     #entrypoint: ["/zap/zap-baseline.py","-t","http://webapp:8888/simple-web-app/users","-r","report.xml","-I"]
-    command: ["/zap/zap-baseline.py -t http://webapp:8888/simple-web-app/users -r report.xml -I"]
+    #command: ["/zap/zap-baseline.py -t http://webapp:8888/simple-web-app/users -r report.xml -I"]
     networks:
       - pipeline_testing
     depends_on:
