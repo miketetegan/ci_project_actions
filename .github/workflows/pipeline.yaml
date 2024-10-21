@@ -174,7 +174,7 @@ jobs:
           imageName: mike004/java
           imageTag: latest
         run: |
-          echo $DOCKERHUB_TOKEN | docker login -u $USERNAME --password-stdin"
+          echo $DOCKERHUB_TOKEN | docker login -u $USERNAME --password-stdin
           docker push ${imageName}:${imageTag}"
 
 
