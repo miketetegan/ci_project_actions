@@ -41,6 +41,14 @@ services:
     networks:
       - pipeline_testing
 
+  owasp:
+    image: zaproxy/zap-stable:latest
+    networks:
+      - pipeline_testing
+    depends_on:
+      database:
+        condition: service_healthy
+    
 volumes:
   sql_data:
       driver: local
