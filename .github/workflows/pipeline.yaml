@@ -99,7 +99,7 @@ jobs:
           args: >
             -D sonar.organization=miketech
             -D sonar.projectName=dockerfile
-            -D sonar.projectKey=dockerfile
+            -D sonar.projectKey=miketech_dockerfile
             -D sonar.sources=.
             -D sonar.inclusions=Dockerfile
           #-D sonar.projectKey=miketetegan_ci_project_actions 
